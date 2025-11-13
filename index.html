@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محرك بحث الدروس التعليمية</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f4f6f5;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 500px;
+    height: 500px;
+    background: url('https://i.postimg.cc/Lhdfcttc/IMG-7700.jpg') no-repeat center;
+    background-size: contain;
+    opacity: 0.07;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  header {
+    background: linear-gradient(135deg, #0d5e3a, #15a062, #d4a21e);
+    color: #fff;
+    text-align: center;
+    padding: 40px 15px;
+    border-bottom: 6px solid #d4a21e;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 800;
+  }
+
+  header p {
+    margin: 15px auto 0;
+    max-width: 700px;
+    line-height: 1.8;
+    font-size: 1.05rem;
+    font-weight: 500;
+  }
+
+  .footer-labels {
+    margin-top: 25px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  .footer-labels div {
+    background: rgba(0,0,0,0.20);
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+  }
+
+  .school-director {
+    text-align: center;
+    margin: 40px 0 10px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0d5e3a;
+  }
+
+  /* صندوق البحث */
+  .search-box {
+    max-width: 900px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-right: 4px solid #0d5e3a;
+  }
+
+  .search-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  select, input {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 8px;
+    outline: none;
+  }
+
+  select {
+    border: 2px solid #0d5e3a;
+    font-weight: 600;
+    color: #0d5e3a;
+  }
+
+  input {
+    flex: 1;
+    border: 2px solid #d4a21e;
+  }
+
+  button {
+    padding: 10px 20px;
+    background: #0d5e3a;
+    color: #fff;
+    border: none;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+
+  button:hover {
+    opacity: .9;
+  }
+
+  /* منطقة النتائج placeholder */
+  #resultsPreview {
+    text-align: center;
+    color: #666;
+    padding: 50px 10px;
+    font-size: 1.1rem;
+  }
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>محرك بحث الدروس التعليمية</h1>
+  <p>
+    منصة ذكية تتيح للطلاب الوصول السريع إلى دروس المواد التعليمية للفصل الدراسي الأول،
+    باستخدام بحث فوري ومتقدم مع تشغيل الفيديو مباشرة داخل الصفحة.
+  </p>
+
+  <div class="footer-labels">
+    <div>فكرة الطالب / عزام اللذيذ</div>
+    <div>إعداد وبرمجة الأستاذ / مقرن المطيري</div>
+  </div>
+</header>
+
+<div class="school-director">
+  مدير المدرسة: الأستاذ توفيق العقيلي
+</div>
+
+<!-- صندوق البحث -->
+<div class="search-box">
+  <div class="search-row">
+
+    <select id="gradeSelect">
+      <option value="">اختر الصف</option>
+      <option value="3">الصف الثالث</option>
+      <option value="4">الصف الرابع</option>
+      <option value="5">الصف الخامس</option>
+      <option value="6">الصف السادس</option>
+    </select>
+
+    <input id="searchInput" type="text" placeholder="اكتب اسم الدرس…">
+
+    <button id="searchBtn">بحث</button>
+
+  </div>
+</div>
+
+<!-- نتائج مبدئية تجريبية -->
+<div id="resultsPreview">
+  🔍 استخدم مربع البحث لاختيار الصف وكتابة اسم الدرس<br><br>
+  (هذه المنطقة ستتحول لاحقًا لنتائج الدروس + مشغّل الفيديو)
+</div>
+
+</body>
+</html>
