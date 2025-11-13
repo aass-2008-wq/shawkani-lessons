@@ -15,26 +15,13 @@
     background: #f4f6f5;
   }
 
-  /* الشعار أعلى الصفحة */
-  .logo-top {
+  /* اسم المدرسة أعلى الصفحة */
+  .school-name {
     text-align: center;
     padding: 25px 0 10px;
-  }
-
-  .logo-top img {
-    width: 150px;
-    height: auto;
-  }
-
-  /* العلامة المائية داخل الهيدر */
-  .header-watermark {
-    position: absolute;
-    top: 10px;
-    right: 50%;
-    transform: translateX(50%);
-    width: 260px;
-    opacity: 0.10;
-    z-index: 1;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #0d5e3a;
   }
 
   /* الهيدر */
@@ -46,7 +33,6 @@
     padding: 60px 15px 70px;
     border-bottom: 6px solid #d4a21e;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    overflow: hidden;
   }
 
   header h1 {
@@ -160,17 +146,10 @@
 
 <body>
 
-<!-- الشعار أعلى الصفحة -->
-<div class="logo-top">
-  <img src="https://raw.githubusercontent.com/mqren-ai/shawkani-logo/main/logo.png" alt="شعار مدرسة الإمام الشوكاني">
-</div>
+<!-- اسم المدرسة -->
+<div class="school-name">مدرسة الإمام الشوكاني الابتدائية</div>
 
 <header>
-
-  <!-- الشعار علامة مائية داخل الهيدر -->
-  <img class="header-watermark"
-       src="https://raw.githubusercontent.com/mqren-ai/shawkani-logo/main/logo.png"
-       alt="Watermark Logo">
 
   <h1>محرك بحث الدروس التعليمية</h1>
 
