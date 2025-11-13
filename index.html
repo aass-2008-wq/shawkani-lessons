@@ -15,25 +15,23 @@
     background: #f4f6f5;
   }
 
-  body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 500px;
-    height: 500px;
-    background: url('https://i.postimg.cc/Lhdfcttc/IMG-7700.jpg') no-repeat center;
-    background-size: contain;
-    opacity: 0.07;
-    z-index: -1;
-    pointer-events: none;
+  /* الشعار في الأعلى */
+  .logo-box {
+    text-align: center;
+    padding: 25px 0 10px;
   }
 
+  .logo-box img {
+    width: 145px;
+    height: auto;
+  }
+
+  /* الهيدر الأخضر */
   header {
     background: linear-gradient(135deg, #0d5e3a, #15a062, #d4a21e);
     color: #fff;
     text-align: center;
-    padding: 40px 15px;
+    padding: 35px 15px;
     border-bottom: 6px solid #d4a21e;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   }
@@ -62,7 +60,7 @@
   }
 
   .footer-labels div {
-    background: rgba(0,0,0,0.20);
+    background: rgba(0,0,0,0.18);
     padding: 8px 14px;
     border-radius: 8px;
     border: 1px solid rgba(255,255,255,0.3);
@@ -128,7 +126,6 @@
     opacity: .9;
   }
 
-  /* منطقة النتائج placeholder */
   #resultsPreview {
     text-align: center;
     color: #666;
@@ -141,11 +138,16 @@
 
 <body>
 
+<!-- شعار المدرسة -->
+<div class="logo-box">
+  <img src="https://i.postimg.cc/8CJcbJZ1/shawkani-logo.png" alt="شعار مدرسة الإمام الشوكاني">
+</div>
+
 <header>
   <h1>محرك بحث الدروس التعليمية</h1>
   <p>
-    منصة ذكية تتيح للطلاب الوصول السريع إلى دروس المواد التعليمية للفصل الدراسي الأول،
-    باستخدام بحث فوري ومتقدم مع تشغيل الفيديو مباشرة داخل الصفحة.
+    منصة ذكية للوصول السريع إلى دروس مواد الصفوف (ثالث – رابع – خامس – سادس)
+    للفصل الدراسي الأول، مع تشغيل الفيديو مباشرة داخل الصفحة.
   </p>
 
   <div class="footer-labels">
@@ -171,16 +173,16 @@
     </select>
 
     <input id="searchInput" type="text" placeholder="اكتب اسم الدرس…">
-
     <button id="searchBtn">بحث</button>
 
   </div>
 </div>
 
-<!-- نتائج مبدئية تجريبية -->
+<!-- منطقة مبدئية قبل إضافة المحرك -->
 <div id="resultsPreview">
-  🔍 استخدم مربع البحث لاختيار الصف وكتابة اسم الدرس<br><br>
-  (هذه المنطقة ستتحول لاحقًا لنتائج الدروس + مشغّل الفيديو)
+  🔍 اختر الصف ثم اكتب اسم الدرس لعرض النتائج  
+  <br><br>
+  (سيتم إضافة محرك البحث الكامل + مشغل الفيديو هنا)
 </div>
 
 </body>
