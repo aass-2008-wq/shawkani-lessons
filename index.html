@@ -41,10 +41,9 @@
 
   header p {
     margin: 15px auto 0;
-    max-width: 720px;
+    max-width: 700px;
     line-height: 1.8;
-    font-size: 1.1rem;
-    font-weight: 500;
+    font-size: 1.05rem;
   }
 
   .footer-labels {
@@ -66,7 +65,7 @@
 
   .school-director {
     text-align: center;
-    margin: 35px 0 10px;
+    margin: 30px 0 10px;
     font-size: 1.05rem;
     font-weight: 800;
     color: #0d5e3a;
@@ -74,19 +73,17 @@
 
   .search-box {
     max-width: 900px;
-    margin: 25px auto 10px;
+    margin: 20px auto;
     background: #fff;
     padding: 18px;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.10);
     border-right: 4px solid #0d5e3a;
-    position: relative;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.10);
   }
 
   .search-row {
     display: flex;
     gap: 10px;
-    align-items: center;
     flex-wrap: wrap;
   }
 
@@ -115,72 +112,59 @@
     border: none;
     font-size: 1rem;
     font-weight: 700;
-    cursor: pointer;
     border-radius: 8px;
+    cursor: pointer;
   }
 
   .suggestions {
     margin-top: 8px;
-    background: #ffffff;
+    background: #fff;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
     max-height: 220px;
     overflow-y: auto;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #eee;
+    display: none;
   }
 
   .suggestion-item {
-    padding: 8px 10px;
+    padding: 10px;
+    border-bottom: 1px solid #f1f1f1;
     cursor: pointer;
-    font-size: 0.9rem;
-    border-bottom: 1px solid #f1f5f9;
   }
 
-  .suggestion-title {
-    font-weight: 700;
-    color: #0f172a;
-  }
-
-  .suggestion-meta {
-    font-size: 0.8rem;
-    color: #64748b;
+  .suggestion-item:hover {
+    background: #f9fafb;
   }
 
   .results {
     max-width: 900px;
-    margin: 5px auto 20px;
-  }
-
-  .results-header {
-    font-size: 0.95rem;
-    color: #475569;
-    margin: 10px 5px;
+    margin: 10px auto 15px;
   }
 
   .result-item {
-    background: #ffffff;
-    margin-bottom: 10px;
-    padding: 10px 12px;
+    padding: 12px;
     border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    background: #fff;
     border-right: 4px solid #0d5e3a;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    margin-bottom: 10px;
     cursor: pointer;
   }
 
   .video-player {
     max-width: 900px;
-    margin: 20px auto 30px;
-    background: #ffffff;
-    padding: 12px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 15px;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.10);
+    display: none;
   }
 
-  .video-player iframe {
+  iframe {
     width: 100%;
-    height: 315px;
+    height: 320px;
     border-radius: 10px;
-    border: none;
   }
 </style>
 </head>
@@ -191,7 +175,7 @@
 
 <header>
   <h1>محرك بحث الدروس التعليمية</h1>
-  <p>منصة ذكية للوصول السريع لدروس مواد الصفوف (ثالث – رابع – خامس – سادس) الفصل الدراسي الأول.</p>
+  <p>للبحث الذكي عن دروس الصفوف (ثالث – رابع – خامس – سادس) للفصل الدراسي الأول – جميع المواد الأساسية.</p>
 
   <div class="footer-labels">
     <div>فكرة الطالب / عزام اللذيذ</div>
@@ -199,15 +183,11 @@
   </div>
 </header>
 
-<div class="school-director">
-  مدير المدرسة: الأستاذ توفيق العقيلي
-</div>
+<div class="school-director">مدير المدرسة: الأستاذ توفيق العقيلي</div>
 
-<!-- صندوق البحث -->
 <div class="search-box">
-  <div class="search-row">
 
-    <!-- اختيار الصف -->
+  <div class="search-row">
     <select id="gradeSelect">
       <option value="">الصف</option>
       <option value="3">ثالث</option>
@@ -216,7 +196,6 @@
       <option value="6">سادس</option>
     </select>
 
-    <!-- اختيار المادة -->
     <select id="subjectSelect">
       <option value="">المادة</option>
       <option value="لغتي">لغتي</option>
@@ -227,171 +206,150 @@
 
     <input id="searchInput" type="text" placeholder="اكتب اسم الدرس…">
     <button id="searchBtn">بحث</button>
-
   </div>
 
-  <div id="suggestions" class="suggestions" style="display:none;"></div>
+  <div id="suggestions" class="suggestions"></div>
 </div>
 
-<div class="results">
-  <div id="resultsHeader" class="results-header" style="display:none;"></div>
-  <div id="resultsList"></div>
-</div>
+<div id="resultsList" class="results"></div>
 
-<div id="videoPlayer" class="video-player" style="display:none;">
+<div id="videoPlayer" class="video-player">
   <h2 id="videoTitle"></h2>
-  <iframe id="videoFrame" src="" allowfullscreen></iframe>
+  <iframe id="videoFrame" allowfullscreen></iframe>
 </div>
 
 <script>
-  // مفتاح API الخاص بك (جاهز)
-  const API_KEY = "AIzaSyDBU4LwwwsEV5tuJqXjvhYp1NRobLR011I";
-  const AIN_CHANNEL_ID = "UCndb1LGM5oQJVhjh2NViU5g";
+const API_KEY = "AIzaSyDBU4LwwwsEV5tuJqXjvhYp1NRobLR011I";
+const CHANNEL_ID = "UCndb1LGM5oQJVhjh2NViU5g";
 
-  const gradeSelect = document.getElementById("gradeSelect");
-  const subjectSelect = document.getElementById("subjectSelect");
-  const searchInput = document.getElementById("searchInput");
-  const searchBtn = document.getElementById("searchBtn");
-  const suggestionsEl = document.getElementById("suggestions");
-  const resultsHeader = document.getElementById("resultsHeader");
-  const resultsList = document.getElementById("resultsList");
-  const videoPlayer = document.getElementById("videoPlayer");
-  const videoTitle = document.getElementById("videoTitle");
-  const videoFrame = document.getElementById("videoFrame");
+const gradeSelect = document.getElementById("gradeSelect");
+const subjectSelect = document.getElementById("subjectSelect");
+const searchInput = document.getElementById("searchInput");
+const searchBtn = document.getElementById("searchBtn");
+const suggestions = document.getElementById("suggestions");
+const resultsList = document.getElementById("resultsList");
+const videoPlayer = document.getElementById("videoPlayer");
+const videoTitle = document.getElementById("videoTitle");
+const videoFrame = document.getElementById("videoFrame");
 
-  function gradeLabel(grade) {
-    if (grade === "3") return "الصف الثالث";
-    if (grade === "4") return "الصف الرابع";
-    if (grade === "5") return "الصف الخامس";
-    if (grade === "6") return "الصف السادس";
-    return "";
-  }
+// تحويل مدة الفيديو إلى ثواني
+function parseDuration(iso) {
+  const match = iso.match(/PT(\d+M)?(\d+S)?/);
+  const minutes = match[1] ? parseInt(match[1]) : 0;
+  const seconds = match[2] ? parseInt(match[2]) : 0;
+  return minutes * 60 + seconds;
+}
 
-  // بناء نص البحث للصف + المادة
-  function buildQuery(query, grade, subject) {
-    let q = query.trim();
+function buildQuery(text, grade, subject) {
+  let q = text;
+  if (subject) q += " " + subject;
+  if (grade) q += " الصف " + grade + " ابتدائي";
+  q += " الفصل الأول";
+  return q;
+}
 
-    if (subject) q += " " + subject;
-    if (grade) q += " " + gradeLabel(grade);
+async function fetchDurations(videoIds) {
+  const url = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${videoIds.join(",")}&key=${API_KEY}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  const durations = {};
+  data.items.forEach(v => {
+    durations[v.id] = parseDuration(v.contentDetails.duration);
+  });
+  return durations;
+}
 
-    q += " الفصل الأول";
+async function searchYouTube(text) {
+  const grade = gradeSelect.value;
+  const subject = subjectSelect.value;
+  const q = buildQuery(text, grade, subject);
 
-    return q;
-  }
+  const url = `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=snippet&type=video&maxResults=15&q=${encodeURIComponent(q)}`;
 
-  async function searchYouTube(query, grade, subject, maxResults = 10) {
-    const q = buildQuery(query, grade, subject);
+  const res = await fetch(url);
+  const data = await res.json();
 
-    const url = `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${AIN_CHANNEL_ID}&part=snippet&type=video&maxResults=${maxResults}&q=${encodeURIComponent(q)}`;
+  if (!data.items) return [];
 
-    const res = await fetch(url);
-    const data = await res.json();
+  const videoIds = data.items.map(i => i.id.videoId);
+  const durations = await fetchDurations(videoIds);
 
-    if (!data.items) return [];
+  return data.items.filter(item => {
+    const title = item.snippet.title;
 
-    return data.items.map(item => ({
-      title: item.snippet.title,
-      videoId: item.id.videoId,
-      grade: grade,
-      subject: subject || "قناة عين"
-    }));
-  }
+    // استبعاد المقاطع القصيرة أقل من 20 ثانية
+    if (durations[item.id.videoId] < 20) return false;
 
-  let suggestTimer;
-  async function showSuggestions() {
+    // الفلترة حسب الصف
     const grade = gradeSelect.value;
-    const subject = subjectSelect.value;
-    const query = searchInput.value.trim();
+    if (grade && !title.includes(grade)) return false;
 
-    clearTimeout(suggestTimer);
+    return true;
+  }).map(item => ({
+    title: item.snippet.title,
+    videoId: item.id.videoId
+  }));
+}
 
-    if (!query) {
-      suggestionsEl.style.display = "none";
-      return;
-    }
+let suggestTimer;
+searchInput.addEventListener("input", () => {
+  clearTimeout(suggestTimer);
 
-    suggestTimer = setTimeout(async () => {
-      const results = await searchYouTube(query, grade, subject, 8);
-      suggestionsEl.innerHTML = "";
-
-      if (results.length === 0) {
-        suggestionsEl.style.display = "none";
-        return;
-      }
-
-      results.forEach(r => {
-        const div = document.createElement("div");
-        div.className = "suggestion-item";
-        div.innerHTML = `
-          <div class="suggestion-title">${r.title}</div>
-          <div class="suggestion-meta">${gradeLabel(r.grade)} | ${r.subject}</div>
-        `;
-        div.onclick = () => {
-          suggestionsEl.style.display = "none";
-          searchInput.value = r.title;
-          renderResults([r]);
-          playLesson(r);
-        };
-        suggestionsEl.appendChild(div);
-      });
-
-      suggestionsEl.style.display = "block";
-    }, 400);
+  const text = searchInput.value.trim();
+  if (!text) {
+    suggestions.style.display = "none";
+    return;
   }
 
-  function renderResults(results) {
-    resultsList.innerHTML = "";
-    if (results.length === 0) {
-      resultsHeader.style.display = "block";
-      resultsHeader.textContent = "لا توجد نتائج.";
+  suggestTimer = setTimeout(async () => {
+    const list = await searchYouTube(text);
+    suggestions.innerHTML = "";
+
+    if (list.length === 0) {
+      suggestions.style.display = "none";
       return;
     }
 
-    resultsHeader.style.display = "block";
-    resultsHeader.textContent = `عدد النتائج: ${results.length}`;
-
-    results.forEach(r => {
-      const item = document.createElement("div");
-      item.className = "result-item";
-      item.innerHTML = `
-        <h3>${r.title}</h3>
-        <div class="result-meta">${gradeLabel(r.grade)} | ${r.subject}</div>
-      `;
-      item.onclick = () => playLesson(r);
-      resultsList.appendChild(item);
+    list.slice(0, 8).forEach(item => {
+      const div = document.createElement("div");
+      div.className = "suggestion-item";
+      div.textContent = item.title;
+      div.onclick = () => {
+        searchInput.value = item.title;
+        suggestions.style.display = "none";
+        displayResults([item]);
+        playVideo(item);
+      };
+      suggestions.appendChild(div);
     });
-  }
 
-  function playLesson(lesson) {
-    videoTitle.textContent = lesson.title;
-    videoFrame.src = `https://www.youtube.com/embed/${lesson.videoId}`;
-    videoPlayer.style.display = "block";
-    videoPlayer.scrollIntoView({ behavior: "smooth" });
-  }
+    suggestions.style.display = "block";
+  }, 500);
+});
 
-  async function handleSearch() {
-    const grade = gradeSelect.value;
-    const subject = subjectSelect.value;
-    const query = searchInput.value.trim();
+searchBtn.addEventListener("click", async () => {
+  const text = searchInput.value.trim();
+  const list = await searchYouTube(text);
+  displayResults(list);
+});
 
-    if (!query) return;
-
-    const results = await searchYouTube(query, grade, subject, 15);
-    renderResults(results);
-  }
-
-  searchInput.addEventListener("input", showSuggestions);
-  searchBtn.addEventListener("click", handleSearch);
-
-  searchInput.addEventListener("keyup", e => {
-    if (e.key === "Enter") handleSearch();
+function displayResults(list) {
+  resultsList.innerHTML = "";
+  list.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "result-item";
+    div.textContent = item.title;
+    div.onclick = () => playVideo(item);
+    resultsList.appendChild(div);
   });
+}
 
-  document.addEventListener("click", e => {
-    if (!e.target.closest(".search-box")) {
-      suggestionsEl.style.display = "none";
-    }
-  });
+function playVideo(item) {
+  videoTitle.textContent = item.title;
+  videoFrame.src = `https://www.youtube.com/embed/${item.videoId}`;
+  videoPlayer.style.display = "block";
+  videoPlayer.scrollIntoView({behavior: "smooth"});
+}
 </script>
 
 </body>
