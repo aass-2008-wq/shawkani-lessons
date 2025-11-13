@@ -85,12 +85,13 @@
   /* صندوق البحث */
   .search-box {
     max-width: 900px;
-    margin: 25px auto;
+    margin: 25px auto 10px;
     background: #fff;
     padding: 18px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.10);
     border-right: 4px solid #0d5e3a;
+    position: relative;
   }
 
   .search-row {
@@ -133,14 +134,106 @@
     opacity: .9;
   }
 
-  /* منطقة العرض المبدئية */
-  #resultsPreview {
-    text-align: center;
-    color: #666;
-    padding: 60px 10px;
-    font-size: 1.1rem;
+  /* قائمة الاقتراحات */
+  .suggestions {
+    margin-top: 8px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    max-height: 220px;
+    overflow-y: auto;
+    border: 1px solid #e2e8f0;
   }
 
+  .suggestion-item {
+    padding: 8px 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .suggestion-item:last-child {
+    border-bottom: none;
+  }
+
+  .suggestion-item:hover {
+    background: #f1f5f9;
+  }
+
+  .suggestion-title {
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  .suggestion-meta {
+    font-size: 0.8rem;
+    color: #64748b;
+  }
+
+  /* النتائج */
+  .results {
+    max-width: 900px;
+    margin: 5px auto 20px;
+  }
+
+  .results-header {
+    font-size: 0.95rem;
+    color: #475569;
+    margin: 10px 5px;
+  }
+
+  .result-item {
+    background: #ffffff;
+    margin-bottom: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    border-right: 4px solid #0d5e3a;
+    cursor: pointer;
+  }
+
+  .result-item h3 {
+    margin: 0 0 5px;
+    font-size: 1rem;
+    color: #0f172a;
+  }
+
+  .result-meta {
+    font-size: 0.85rem;
+    color: #64748b;
+  }
+
+  /* مشغّل الفيديو */
+  .video-player {
+    max-width: 900px;
+    margin: 20px auto 30px;
+    background: #ffffff;
+    padding: 12px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+  }
+
+  .video-player h2 {
+    margin: 0 0 10px;
+    font-size: 1.1rem;
+    color: #0f172a;
+  }
+
+  .video-player iframe {
+    width: 100%;
+    height: 315px;
+    border-radius: 10px;
+    border: none;
+  }
+
+  @media (max-width: 600px) {
+    header h1 {
+      font-size: 1.8rem;
+    }
+    .video-player iframe {
+      height: 220px;
+    }
+  }
 </style>
 </head>
 
@@ -150,7 +243,6 @@
 <div class="school-name">مدرسة الإمام الشوكاني الابتدائية</div>
 
 <header>
-
   <h1>محرك بحث الدروس التعليمية</h1>
 
   <p>
@@ -162,7 +254,6 @@
     <div>فكرة الطالب / عزام اللذيذ</div>
     <div>إعداد وبرمجة الأستاذ / مقرن المطيري</div>
   </div>
-
 </header>
 
 <div class="school-director">
@@ -186,14 +277,228 @@
     <button id="searchBtn">بحث</button>
 
   </div>
+
+  <!-- اقتراحات البحث الذكي -->
+  <div id="suggestions" class="suggestions" style="display:none;"></div>
 </div>
 
-<!-- شاشة قبل تركيب المحرك -->
-<div id="resultsPreview">
-  🔍 اختر الصف ثم اكتب اسم الدرس لعرض النتائج  
-  <br><br>
-  (سيتم إضافة محرك البحث الكامل + مشغل الفيديو هنا)
+<!-- النتائج -->
+<div class="results">
+  <div id="resultsHeader" class="results-header" style="display:none;"></div>
+  <div id="resultsList"></div>
 </div>
+
+<!-- مشغّل الفيديو -->
+<div id="videoPlayer" class="video-player" style="display:none;">
+  <h2 id="videoTitle"></h2>
+  <iframe id="videoFrame" src="" allowfullscreen></iframe>
+</div>
+
+<script>
+  // ========= إعدادات يوتيوب =========
+  // ضع مفتاحك هنا
+  const API_KEY = "YOUR_API_KEY_HERE"; // استبدله بمفتاحك
+  // قناة عين دروس الرسمية
+  const AIN_CHANNEL_ID = "UCndb1LGM5oQJVhjh2NViU5g";
+
+  const gradeSelect   = document.getElementById("gradeSelect");
+  const searchInput   = document.getElementById("searchInput");
+  const searchBtn     = document.getElementById("searchBtn");
+  const suggestionsEl = document.getElementById("suggestions");
+  const resultsHeader = document.getElementById("resultsHeader");
+  const resultsList   = document.getElementById("resultsList");
+  const videoPlayer   = document.getElementById("videoPlayer");
+  const videoTitle    = document.getElementById("videoTitle");
+  const videoFrame    = document.getElementById("videoFrame");
+
+  // تحويل رقم الصف إلى نص عربي
+  function gradeLabel(grade) {
+    if (grade === "3") return "الصف الثالث الابتدائي";
+    if (grade === "4") return "الصف الرابع الابتدائي";
+    if (grade === "5") return "الصف الخامس الابتدائي";
+    if (grade === "6") return "الصف السادس الابتدائي";
+    return "";
+  }
+
+  // بناء نص البحث الذكي لقناة عين
+  function buildQuery(baseQuery, grade) {
+    let q = baseQuery.trim();
+    const gLabel = gradeLabel(grade);
+
+    // نضيف معلومات الصف + كلمة "الفصل الأول" لتقريب النتائج
+    if (gLabel) {
+      q += " " + gLabel;
+    }
+    q += " الفصل الأول";
+    return q;
+  }
+
+  // استعلام من YouTube API (بحث في قناة عين)
+  async function searchLessonsFromYouTube(baseQuery, grade, maxResults = 10) {
+    const q = buildQuery(baseQuery, grade);
+    if (!API_KEY) {
+      console.error("يجب وضع API KEY في الكود.");
+      return [];
+    }
+
+    const url = new URL("https://www.googleapis.com/youtube/v3/search");
+    url.searchParams.set("key", API_KEY);
+    url.searchParams.set("channelId", AIN_CHANNEL_ID);
+    url.searchParams.set("part", "snippet");
+    url.searchParams.set("type", "video");
+    url.searchParams.set("maxResults", maxResults);
+    url.searchParams.set("q", q);
+
+    try {
+      const res = await fetch(url.toString());
+      const data = await res.json();
+      if (!data.items) return [];
+
+      return data.items.map(item => ({
+        title: item.snippet.title,
+        videoId: item.id.videoId,
+        description: item.snippet.description || "",
+        publishedAt: item.snippet.publishedAt || "",
+        thumbnail: item.snippet.thumbnails && item.snippet.thumbnails.medium
+          ? item.snippet.thumbnails.medium.url
+          : "",
+        grade: grade || "",
+        subject: "منهج عين (يوتيوب)"
+      }));
+    } catch (err) {
+      console.error("خطأ في جلب البيانات من يوتيوب:", err);
+      return [];
+    }
+  }
+
+  // عرض الاقتراحات تحت مربع البحث
+  let suggestTimeout;
+  async function showSuggestions() {
+    const grade = gradeSelect.value;
+    const query = searchInput.value.trim();
+
+    clearTimeout(suggestTimeout);
+
+    if (!query) {
+      suggestionsEl.style.display = "none";
+      suggestionsEl.innerHTML = "";
+      return;
+    }
+
+    // تأخير بسيط حتى لا نرسل طلب على كل حرف بسرعة
+    suggestTimeout = setTimeout(async () => {
+      const lessons = await searchLessonsFromYouTube(query, grade, 8);
+
+      if (!lessons || lessons.length === 0) {
+        suggestionsEl.style.display = "none";
+        suggestionsEl.innerHTML = "";
+        return;
+      }
+
+      suggestionsEl.innerHTML = "";
+      lessons.forEach(lesson => {
+        const item = document.createElement("div");
+        item.className = "suggestion-item";
+
+        const titleEl = document.createElement("div");
+        titleEl.className = "suggestion-title";
+        titleEl.textContent = lesson.title;
+
+        const metaEl = document.createElement("div");
+        metaEl.className = "suggestion-meta";
+        metaEl.textContent = grade ? gradeLabel(grade) + " – عين دروس" : "عين دروس";
+
+        item.appendChild(titleEl);
+        item.appendChild(metaEl);
+
+        item.addEventListener("click", () => {
+          suggestionsEl.style.display = "none";
+          searchInput.value = lesson.title;
+          renderResults([lesson]);
+          playLesson(lesson);
+        });
+
+        suggestionsEl.appendChild(item);
+      });
+
+      suggestionsEl.style.display = "block";
+    }, 400);
+  }
+
+  // عرض النتائج في قائمة
+  function renderResults(list) {
+    resultsList.innerHTML = "";
+
+    if (!list || list.length === 0) {
+      resultsHeader.style.display = "block";
+      resultsHeader.textContent = "لا توجد نتائج مطابقة لبيانات البحث.";
+      return;
+    }
+
+    resultsHeader.style.display = "block";
+    resultsHeader.textContent = `عدد النتائج من قناة عين: ${list.length}`;
+
+    list.forEach(lesson => {
+      const item = document.createElement("div");
+      item.className = "result-item";
+
+      const h3 = document.createElement("h3");
+      h3.textContent = lesson.title;
+
+      const meta = document.createElement("div");
+      meta.className = "result-meta";
+      meta.textContent = gradeLabel(lesson.grade) || "قناة عين";
+
+      item.appendChild(h3);
+      item.appendChild(meta);
+
+      item.addEventListener("click", () => {
+        playLesson(lesson);
+      });
+
+      resultsList.appendChild(item);
+    });
+  }
+
+  // تشغيل الفيديو داخل المشغل
+  function playLesson(lesson) {
+    const embedUrl = `https://www.youtube.com/embed/${lesson.videoId}`;
+    videoTitle.textContent = lesson.title;
+    videoFrame.src = embedUrl;
+    videoPlayer.style.display = "block";
+    videoPlayer.scrollIntoView({ behavior: "smooth" });
+  }
+
+  // عند الضغط على زر "بحث"
+  async function handleSearch() {
+    const grade = gradeSelect.value;
+    const query = searchInput.value.trim();
+    if (!query) return;
+
+    suggestionsEl.style.display = "none";
+    suggestionsEl.innerHTML = "";
+
+    const lessons = await searchLessonsFromYouTube(query, grade, 15);
+    renderResults(lessons);
+  }
+
+  // الأحداث
+  searchInput.addEventListener("input", showSuggestions);
+  searchBtn.addEventListener("click", handleSearch);
+
+  searchInput.addEventListener("keyup", (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  });
+
+  // إغلاق الاقتراحات عند الضغط خارج صندوق البحث
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".search-box")) {
+      suggestionsEl.style.display = "none";
+    }
+  });
+</script>
 
 </body>
 </html>
